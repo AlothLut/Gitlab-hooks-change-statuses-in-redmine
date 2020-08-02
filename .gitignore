@@ -1,0 +1,5 @@
+/.vscode
+vendor
+*log
+.env
+docker/var/log

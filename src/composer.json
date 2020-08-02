@@ -1,0 +1,18 @@
+{
+    "name": "gitlab-webhooks",
+    "description": "webhhoks on gitlab triggered redmine",
+    "require": {
+        "php" : "7.2.*",
+        "kbsali/redmine-api": "^1.5",
+        "ext-json": "*",
+        "vlucas/phpdotenv": "^5.1",
+        "monolog/monolog": "^2.1",
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+          "": "lib/"
+        }
+    }
+}

@@ -1,25 +1,36 @@
-version: '3.1'
+version: '3.6'
 
 services:
+    redmine:
+        image: redmine
+        restart: always
+        container_name: "redmine"
+        depends_on:
+            - db
+        ports:
+            - 8080:3000
+        environment:
+            REDMINE_DB_MYSQL: db
+            REDMINE_DB_PASSWORD: example
+            REDMINE_SECRET_KEY_BASE: supersecretkey
+        networks:
+            - app-network
 
-  redmine:
-    image: redmine
-    restart: always
-    ports:
-      - 8080:3000
-    environment:
-      REDMINE_DB_MYSQL: db
-      REDMINE_DB_PASSWORD: example
-      REDMINE_SECRET_KEY_BASE: supersecretkey
-
-  db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: redmine
-    volumes:
-    - dbdata:/var/lib/mysql/
+    db:
+        image: mysql:5.7
+        restart: always
+        container_name: "redmine-db"
+        environment:
+            MYSQL_ROOT_PASSWORD: example
+            MYSQL_DATABASE: redmine
+        volumes:
+            - dbdata:/var/lib/mysql/
+        networks:
+            - app-network
 
 volumes:
     dbdata:
+
+networks:
+    app-network:
+        driver: bridge
