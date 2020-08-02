@@ -54,32 +54,28 @@ class ChangeRedmineStatus
     */
     private function responseHandler()
     {
-        // $redmine = new Client('http://redmine:3000/', $_ENV['REDMINE_API_KEY']);
-        // $a = $redmine->issue_status->listing();
-        // var_dump($a);
         $jsonRequest = file_get_contents('php://input');
         $params = [
             "response" => $jsonRequest,
         ];
-        $this->logger->info('1', [$jsonRequest]);
+
         $naiveInput = new InitialParams;
         $mr = new MergeRequest($naiveInput);
         $newNote = new NewNote($mr);
         $params = $newNote->formatParams($params);
-        $this->logger->info('2', [$params]);
 
         if ($params['id'] && $params['status']) {
             $redmine = new Client('http://redmine:3000/', $_ENV['REDMINE_API_KEY']);
             $errorSetStatus = $redmine->issue->setIssueStatus($params['id'], $params['status']);
 
             if ($errorSetStatus !== false) {
-                $this->logger->info('3', [$errorSetStatus]);
+                $this->logger->info('errorSetStatus', [$errorSetStatus]);
             }
 
             if (!empty($params['url'])) {
                 $errorAddNote = $redmine->issue->addNoteToIssue($params['id'], $params['url']);
                 if ($errorAddNote !== false) {
-                    $this->logger->info('4', [$errorAddNote]);
+                    $this->logger->info('errorAddNote', [$errorAddNote]);
                 }
             }
         } else {
